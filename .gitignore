@@ -1,10 +1,3 @@
-# Dependencies
-node_modules/
-package-lock.json
-yarn.lock
-bun.lock
-pnpm-lock.yaml
-
 # Logs
 logs
 *.log
@@ -14,26 +7,20 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Build outputs
+node_modules
 dist
 dist-ssr
 .output
 .vinxi
+.tanstack/**
 .nitro
 *.local
 
-# Framework/Build caching
-.tanstack/
-.vite/
-.cache/
-deps/
+# Wrangler / Cloudflare
+.wrangler/
+.dev.vars
 
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# IDE and Editor
+# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -43,26 +30,4 @@ deps/
 *.njsproj
 *.sln
 *.sw?
-*.iml
-
-# OS files
-Thumbs.db
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Wrangler / Cloudflare
-.wrangler/
-.dev.vars
-
-# Testing
-coverage/
-.nyc_output/
-
-# npm cache
-.npm-cache/
-
-# Temp files
-*.tmp
-*.temp
-.turbo/
+.npm-cache
