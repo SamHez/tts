@@ -1,13 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
+import { useState, useEffect, useRef } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
+import { FadeIn } from "@/components/FadeIn";
 import heroVideo from "@/assets/hero-gacuriro.mp4";
 import heroPoster from "@/assets/hero-scaffolding.jpg";
 import projStadium from "@/assets/project-stadium.jpg";
 import projPlant from "@/assets/project-plant.jpg";
 import projHydro from "@/assets/project-hydro.jpg";
 import projConvention from "@/assets/project-convention.jpg";
-import productCuplock from "@/assets/product-cuplock.jpg";
+import productCuplock from "@/assets/product-cuplock.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -21,11 +23,69 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+
+function Counter({ end, suffix = "" }: { end: number, suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          const duration = 2000;
+          const startTime = performance.now();
+          const animate = (currentTime: number) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+            setCount(Math.floor(easeProgress * end));
+            if (progress < 1) requestAnimationFrame(animate);
+          };
+          requestAnimationFrame(animate);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [end]);
+
+  return <div ref={ref} className="text-4xl font-serif text-white">{count.toLocaleString()}{suffix}</div>;
+}
+
+function TextRotator() {
+  const words = ["Biggest Builds.", "Flagship Projects."];
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % words.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <span className="inline-grid">
+      {words.map((word, i) => (
+        <span
+          key={word}
+          className={`col-start-1 row-start-1 transition-all duration-1000 ${i === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            }`}
+          aria-hidden={i !== index}
+        >
+          {word}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 function Index() {
   return (
     <SiteLayout transparentHeader>
       {/* HERO */}
-      <section className="relative isolate h-screen min-h-[640px] w-full overflow-hidden">
+      <section className="relative isolate h-screen min-h-[780px] w-full overflow-hidden">
         <video
           src={heroVideo}
           poster={heroPoster}
@@ -37,19 +97,19 @@ function Index() {
           className="absolute inset-0 -z-10 h-full w-full object-cover"
         />
         {/* Subtle cinematic vignette — keeps header logo + tagline readable without washing the footage */}
-        <div className="absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b from-ink/60 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-gradient-to-t from-ink/75 via-ink/30 to-transparent" />
+        <div className="absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b from-black/80 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-[#275b32] via-[#275b32]/60 to-transparent" />
 
-        <div className="relative flex h-full flex-col justify-end">
-          <div className="mx-auto w-full max-w-7xl px-6 pb-20 md:pb-28 lg:px-10">
+        <div className="relative flex h-full flex-col justify-end items-center pb-32 md:pb-28">
+          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 flex flex-col items-center text-center">
             <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-background/70">
-              <span className="h-px w-8 bg-primary-glow" /> Est. 1988 · Kigali
+              <span className="h-px w-8 bg-primary-glow" /> Est. 1988 · Kigali <span className="h-px w-8 bg-primary-glow" />
             </div>
-            <h1 className="mt-5 max-w-2xl font-serif text-2xl leading-snug text-background text-balance md:text-3xl lg:text-4xl">
-              Trustable Technical Services<br />
-              <span className="italic text-primary-glow">for Rwanda's biggest builds.</span>
+            <h1 className=" mt-5 max-w-3xl font-serif text-3xl leading-snug text-background text-balance md:text-4xl lg:text-5xl">
+              <span className="text-h1-hero">Trustable Technical Services</span><br />
+              <span className="italic text-primary-glow font-instrument text-hero">for Rwanda's Flagship Projects.</span>
             </h1>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-3 flex flex-wrap justify-center gap-3">
               <Link to="/contact" className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-elev)] transition-all hover:bg-primary-glow hover:text-ink">
                 Start a project
               </Link>
@@ -61,94 +121,158 @@ function Index() {
         </div>
 
         {/* Scroll hint */}
-        <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.3em] text-background/60">
-          Scroll
+        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3">
+          <div className="text-[10px] uppercase tracking-[0.3em] text-background/60">Scroll</div>
+          <div className="h-12 w-px bg-gradient-to-b from-background/60 to-transparent" />
         </div>
       </section>
 
       {/* SERVICES */}
-      <section className="border-y border-border bg-secondary/60">
-        <div className="mx-auto max-w-7xl px-6 py-28 lg:px-10">
-          <div className="flex items-end justify-between gap-6">
-            <div>
-              <div className="text-xs uppercase tracking-[0.22em] text-primary">What we do</div>
-              <h2 className="mt-4 max-w-2xl font-serif text-4xl text-ink md:text-5xl">
-                Equipment, expertise and execution.
-              </h2>
+      <section className="border-y border-border bg-secondary/60 services-section">
+        <div className="mx-auto max-w-7xl px-6 pt-16 pb-28 lg:px-10">
+
+          {/* Trusted Clients Bar */}
+          <div className="mb-16 flex flex-col items-center gap-4">
+            <div className="text-[10px] uppercase tracking-[0.22em] text-white/60">Our Trusted Clients</div>
+
+            <div className="relative w-full overflow-hidden flex items-center h-12 [mask-image:linear-gradient(to_right,transparent,white_5%,white_95%,transparent)]">
+              <div className="flex w-max animate-marquee items-center">
+                {[...Array(2)].map((_, j) => (
+                  <div key={j} className="flex shrink-0 items-center gap-16 pr-16">
+                    {["SKANSKA", "VINCI", "BOUYGUES", "BECHTEL", "TURNER", "KIEWIT", "SKANSKA", "VINCI", "BOUYGUES"].map((logo, i) => (
+                      <div key={i} className="text-2xl font-bold tracking-widest text-white/50">{logo}</div>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
-            <Link to="/services" className="hidden text-sm font-medium text-primary hover:text-primary-deep md:inline">
-              All services →
-            </Link>
           </div>
 
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <FadeIn>
+            <div className="flex flex-col items-center justify-center gap-6 text-center">
+              <div>
+                <div className="text-xs uppercase tracking-[0.22em] text-white">What we do</div>
+                <h2 className="mt-4 max-w-2xl font-serif text-4xl text-white md:text-4xl font-extrabold ">
+                  Equipment, Expertise and Execution.
+                </h2>
+              </div>
+              <Link to="/services" className="text-sm font-medium text-primary hover:text-primary-deep md:inline">
+                All services →
+              </Link>
+            </div>
+          </FadeIn>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-3 services-cards" >
             {[
               {
-                n: "01",
+                n: "",
                 title: "Scaffolding Rental",
                 body: "Cuplock systems, ledgers, standards and accessories rented to spec for projects of any scale.",
               },
               {
-                n: "02",
+                n: "",
                 title: "Machinery & Equipment",
                 body: "Trusted construction equipment supply for stadiums, plants, hydro and commercial works.",
               },
               {
-                n: "03",
+                n: "",
                 title: "Maintenance Services",
                 body: "Specialist on-site maintenance keeping landmark facilities operating safely year after year.",
               },
-            ].map((s) => (
-              <article key={s.n} className="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elev)]">
-                <div className="font-serif text-sm text-primary">{s.n}</div>
-                <h3 className="mt-6 font-serif text-2xl text-ink">{s.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
-                <div className="mt-10 h-px w-full bg-border" />
-                <div className="mt-4 text-xs uppercase tracking-[0.2em] text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                  Trustable →
-                </div>
-              </article>
+            ].map((s, index) => (
+              <FadeIn key={s.title} delay={index * 150} className="h-full">
+                <article className="h-full group relative overflow-hidden rounded-2xl border border-border bg-card p-8 transition-all shadow-[0_4px_24px_-4px_rgba(0,0,0,0.12),0_1px_4px_-1px_rgba(0,0,0,0.08)] hover:-translate-y-1 hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.22),0_4px_16px_-4px_rgba(0,0,0,0.1)]">
+                  <div className="font-serif text-sm text-primary">{s.n}</div>
+                  <h3 className=" font-serif text-2xl text-ink">{s.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
+                </article>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PROJECTS PREVIEW */}
+      <section className="projects-section border-t border-border bg-ink py-28 text-background">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <FadeIn>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <div className="text-xs uppercase tracking-[0.22em] text-primary-glow">Selected work</div>
+                <h2 className="mt-4 max-w-2xl font-serif text-4xl text-background md:text-5xl font-extrabold">
+                  Trusted on Rwanda's landmarks.
+                </h2>
+              </div>
+              <Link to="/projects" className="text-sm font-medium text-primary-glow hover:text-background">
+                View portfolio →
+              </Link>
+            </div>
+          </FadeIn>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              { img: projStadium, name: "Bugesera International Stadium", tag: "Ongoing · Scaffolding" },
+              { img: projConvention, name: "Kigali Convention Centre", tag: "Renovation · Access scaffolding" },
+              { img: projPlant, name: "Milk Powder Plant", tag: "Industrial · Equipment" },
+              { img: projHydro, name: "Gaseke Hydropower Plant", tag: "Energy · Maintenance" },
+            ].map((p, index) => (
+              <FadeIn key={p.name} delay={index * 150} className="h-full">
+                <article className="h-full group relative overflow-hidden rounded-2xl">
+                  <img src={p.img} alt={p.name} loading="lazy" width={1200} height={900} className="aspect-[4/5] h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-6">
+                    <div className="text-[10px] uppercase tracking-[0.22em] text-primary-glow">{p.tag}</div>
+                    <h3 className="mt-2 font-serif text-xl text-background">{p.name}</h3>
+                  </div>
+                </article>
+              </FadeIn>
             ))}
           </div>
         </div>
       </section>
 
       {/* ABOUT INTRO */}
-      <section className="mx-auto grid max-w-7xl gap-16 px-6 py-28 lg:grid-cols-12 lg:px-10">
-        <div className="lg:col-span-5">
+      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-15 lg:grid-cols-2 lg:px-10">
+
+        <FadeIn className="flex flex-col justify-center">
           <div className="text-xs uppercase tracking-[0.22em] text-primary">About TTS</div>
-          <h2 className="mt-4 font-serif text-4xl leading-tight text-ink md:text-5xl">
-            Three decades of <em className="text-primary">trustable</em> work.
+          <h2 className="mt-4 font-serif text-4xl leading-tight font-extrabold text-ink md:text-5xl">
+            Three decades of <em className="text-primary ">trustable</em> work.
           </h2>
-        </div>
-        <div className="space-y-6 text-lg leading-relaxed text-foreground/80 lg:col-span-7">
-          <p>
-            Registered in February 1988, Trustable Technical Services (TTS) Ltd is a
-            diversified investment company specialised in construction-related fields
-            — scaffolding, machinery and equipment, and maintenance services.
-          </p>
-          <p>
-            We direct our work into high-impact projects, creating employment for
-            skilled youth while delivering uncompromising quality to our partners and
-            attractive returns to our shareholders.
-          </p>
-          <Link to="/about" className="inline-flex items-center gap-2 pt-2 text-sm font-medium text-primary hover:text-primary-deep">
+          <div className=" mt-6 space-y-6 text-lg leading-relaxed text-foreground/80 lg:col-span-7">
+            <p>
+              Registered in February 1988, Trustable Technical Services (TTS) Ltd is a
+              diversified investment company specialised in construction-related fields
+              — scaffolding, machinery and equipment, and maintenance services.
+            </p>
+            <p>
+              We direct our work into high-impact projects, creating employment for
+              skilled youth while delivering uncompromising quality to our partners and
+              attractive returns to our shareholders.
+            </p>
+
+          </div>
+          <Link to="/about" className="mt-6 inline-flex items-center gap-2 pt-2 text-sm font-medium text-primary hover:text-primary-deep">
             Read our story <span aria-hidden>→</span>
           </Link>
-        </div>
+        </FadeIn>
+
+        <FadeIn delay={200} className="relative overflow-hidden rounded-3xl bg-ink">
+          <img src={heroPoster} alt="Trustable Technical Services scaffolding" loading="lazy" width={1200} height={900} className="h-full w-full object-cover" />
+        </FadeIn>
       </section>
 
 
 
       {/* FEATURED PRODUCT */}
-      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-28 lg:grid-cols-2 lg:px-10">
-        <div className="relative overflow-hidden rounded-3xl bg-ink">
+      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-10 lg:grid-cols-2 lg:px-10">
+        <FadeIn className="relative overflow-hidden rounded-3xl">
           <img src={productCuplock} alt="Cuplock scaffolding components" loading="lazy" width={1200} height={900} className="h-full w-full object-cover" />
-        </div>
-        <div className="flex flex-col justify-center">
+        </FadeIn>
+        <FadeIn delay={200} className="flex flex-col justify-center">
           <div className="text-xs uppercase tracking-[0.22em] text-primary">Featured System</div>
-          <h2 className="mt-4 font-serif text-4xl text-ink md:text-5xl">
-            Cuplock scaffolding & accessories.
+          <h2 className="mt-4 font-serif text-4xl text-ink md:text-5xl font-bold">
+            TTS Equipment
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-foreground/75">
             Our cuplock system is engineered for speed, safety and repeatable
@@ -165,51 +289,17 @@ function Index() {
           <Link to="/services" className="mt-10 inline-flex w-fit items-center gap-2 rounded-full border border-ink/15 px-6 py-3 text-sm font-medium text-ink transition-all hover:bg-ink hover:text-background">
             Explore equipment <span aria-hidden>→</span>
           </Link>
-        </div>
+        </FadeIn>
       </section>
 
-      {/* PROJECTS PREVIEW */}
-      <section className="border-t border-border bg-ink py-28 text-background">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <div className="text-xs uppercase tracking-[0.22em] text-primary-glow">Selected work</div>
-              <h2 className="mt-4 max-w-2xl font-serif text-4xl text-background md:text-5xl">
-                Trusted on Rwanda's landmarks.
-              </h2>
-            </div>
-            <Link to="/projects" className="text-sm font-medium text-primary-glow hover:text-background">
-              View portfolio →
-            </Link>
-          </div>
-
-          <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {[
-              { img: projStadium, name: "Bugesera International Stadium", tag: "Ongoing · Scaffolding" },
-              { img: projConvention, name: "Kigali Convention Centre", tag: "Renovation · Access scaffolding" },
-              { img: projPlant, name: "Milk Powder Plant", tag: "Industrial · Equipment" },
-              { img: projHydro, name: "Gaseke Hydropower Plant", tag: "Energy · Maintenance" },
-            ].map((p) => (
-              <article key={p.name} className="group relative overflow-hidden rounded-2xl">
-                <img src={p.img} alt={p.name} loading="lazy" width={1200} height={900} className="aspect-[4/5] h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-6">
-                  <div className="text-[10px] uppercase tracking-[0.22em] text-primary-glow">{p.tag}</div>
-                  <h3 className="mt-2 font-serif text-xl text-background">{p.name}</h3>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* CTA */}
-      <section className="mx-auto max-w-7xl px-6 py-28 lg:px-10">
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-12 md:p-20">
+      <section className="mx-auto max-w-7xl px-6 py-15 lg:px-10">
+        <FadeIn className="relative overflow-hidden rounded-3xl border border-border bg-card p-12 md:p-20">
           <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
           <div className="relative grid gap-10 lg:grid-cols-2 lg:items-center">
-            <h2 className="font-serif text-4xl text-ink md:text-5xl text-balance">
-              Have a project that needs <em className="text-primary">trustable</em> hands?
+            <h2 className="font-serif text-4xl text-ink md:text-5xl text-balance font-extrabold">
+              Have a project that needs <em className="text-primary font-instrument">trustable</em> hands?
             </h2>
             <div className="lg:text-right">
               <p className="max-w-md text-foreground/70 lg:ml-auto">
@@ -221,7 +311,7 @@ function Index() {
               </Link>
             </div>
           </div>
-        </div>
+        </FadeIn>
       </section>
     </SiteLayout>
   );
