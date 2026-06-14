@@ -70,7 +70,7 @@ function ProjectsPage() {
         </div>
       </section>
 
-      <section className="border-t border-border bg-ink py-24 text-background">
+      <section className="border-t border-border bg-green py-24 text-background">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <h2 className="font-serif text-3xl md:text-4xl">Portfolio</h2>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

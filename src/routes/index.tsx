@@ -96,9 +96,9 @@ function Index() {
           preload="metadata"
           className="absolute inset-0 -z-10 h-full w-full object-cover"
         />
-        {/* Subtle cinematic vignette — keeps header logo + tagline readable without washing the footage */}
+        {/* Subtle cinematic vignette — keeps header logo + tagline readable without washing the footage  bg-gradient-to-t from-[#275b32] via-[#275b32]/60 to-transparent*/}
         <div className="absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b from-black/80 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-[#275b32] via-[#275b32]/60 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 -z-10 h-1/2" />
 
         <div className="relative flex h-full flex-col justify-end items-center pb-32 md:pb-28">
           <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 flex flex-col items-center text-center">
@@ -107,7 +107,7 @@ function Index() {
             </div>
             <h1 className=" mt-5 max-w-3xl font-serif text-3xl leading-snug text-background text-balance md:text-4xl lg:text-5xl">
               <span className="text-h1-hero">Trustable Technical Services</span><br />
-              <span className="italic text-primary-glow font-instrument text-hero">for Rwanda's Flagship Projects.</span>
+              <span className="italic text-primary-glow text-hero">for Rwanda's Flagship Projects.</span>
             </h1>
             <div className="mt-3 flex flex-wrap justify-center gap-3">
               <Link to="/contact" className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-elev)] transition-all hover:bg-primary-glow hover:text-ink">
@@ -299,7 +299,7 @@ function Index() {
           <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
           <div className="relative grid gap-10 lg:grid-cols-2 lg:items-center">
             <h2 className="font-serif text-4xl text-ink md:text-5xl text-balance font-extrabold">
-              Have a project that needs <em className="text-primary font-instrument">trustable</em> hands?
+              Have a project that needs <em className="text-primary">trustable</em> hands?
             </h2>
             <div className="lg:text-right">
               <p className="max-w-md text-foreground/70 lg:ml-auto">
