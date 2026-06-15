@@ -240,3 +240,9 @@
 .bg-green {
   background-color: #14321b;
 }
+
+.bg-page-header{
+  background-image: url('assets/page-header.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+}

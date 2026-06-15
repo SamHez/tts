@@ -5,11 +5,21 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { FadeIn } from "@/components/FadeIn";
 import heroVideo from "@/assets/hero-gacuriro.mp4";
 import heroPoster from "@/assets/hero-scaffolding.jpg";
-import projStadium from "@/assets/project-stadium.jpg";
+import projStadium from "@/assets/projects/Bugesera airport.jpg";
 import projPlant from "@/assets/project-plant.jpg";
 import projHydro from "@/assets/project-hydro.jpg";
 import projConvention from "@/assets/project-convention.jpg";
 import productCuplock from "@/assets/product-cuplock.png";
+import bioNTechLogo from "@/assets/projects/BioNTech-Kigali-logo.jpg";
+import cimerwaLogo from "@/assets/projects/Cimerwa-factory-logo.jpg";
+import kccLogo from "@/assets/projects/Kigali-Convention-Centre-logo.jpg";
+import inyangeLogo from "@/assets/projects/inyange-Milk-powder-logo.jpg";
+import golfLogo from "@/assets/projects/kigali-Golf-course-logo.jpg";
+
+import bugeseraAirport from "@/assets/projects/Bugesera airport.jpg";
+import kccImg from "@/assets/projects/Kigali Convention Centre.jpg";
+import milkPowderImg from "@/assets/projects/inyange Milk powder.jpeg";
+import gasekeImg from "@/assets/projects/Gaseke Hydropower Plant.jpeg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -135,12 +145,14 @@ function Index() {
           <div className="mb-16 flex flex-col items-center gap-4">
             <div className="text-[10px] uppercase tracking-[0.22em] text-white/60">Our Trusted Clients</div>
 
-            <div className="relative w-full overflow-hidden flex items-center h-12 [mask-image:linear-gradient(to_right,transparent,white_5%,white_95%,transparent)]">
-              <div className="flex w-max animate-marquee items-center">
+            <div className="relative w-full overflow-hidden flex items-center h-16 [mask-image:linear-gradient(to_right,transparent,white_5%,white_95%,transparent)]">
+              <div className="flex w-max animate-marquee items-center gap-8 py-2">
                 {[...Array(2)].map((_, j) => (
-                  <div key={j} className="flex shrink-0 items-center gap-16 pr-16">
-                    {["SKANSKA", "VINCI", "BOUYGUES", "BECHTEL", "TURNER", "KIEWIT", "SKANSKA", "VINCI", "BOUYGUES"].map((logo, i) => (
-                      <div key={i} className="text-2xl font-bold tracking-widest text-white/50">{logo}</div>
+                  <div key={j} className="flex shrink-0 items-center gap-8 pr-8">
+                    {[bioNTechLogo, cimerwaLogo, kccLogo, inyangeLogo, golfLogo].map((logo, i) => (
+                      <div key={i} className="flex items-center justify-center">
+                        <img src={logo} alt={`client-${i}`} className="h-12 w-auto rounded-lg border border-white/10 object-contain bg-white/5 p-1" />
+                      </div>
                     ))}
                   </div>
                 ))}
@@ -168,22 +180,40 @@ function Index() {
                 n: "",
                 title: "Scaffolding Rental",
                 body: "Cuplock systems, ledgers, standards and accessories rented to spec for projects of any scale.",
+                icon: "scaffold",
               },
               {
                 n: "",
                 title: "Machinery & Equipment",
                 body: "Trusted construction equipment supply for stadiums, plants, hydro and commercial works.",
+                icon: "gear",
               },
               {
                 n: "",
                 title: "Maintenance Services",
                 body: "Specialist on-site maintenance keeping landmark facilities operating safely year after year.",
+                icon: "wrench",
               },
             ].map((s, index) => (
               <FadeIn key={s.title} delay={index * 150} className="h-full">
                 <article className="h-full group relative overflow-hidden rounded-2xl border border-border bg-card p-8 transition-all shadow-[0_4px_24px_-4px_rgba(0,0,0,0.12),0_1px_4px_-1px_rgba(0,0,0,0.08)] hover:-translate-y-1 hover:shadow-[0_20px_60px_-12px_rgba(0,0,0,0.22),0_4px_16px_-4px_rgba(0,0,0,0.1)]">
                   <div className="font-serif text-sm text-primary">{s.n}</div>
-                  <h3 className=" font-serif text-2xl text-ink">{s.title}</h3>
+                  <h3 className="flex items-center gap-3 font-serif text-2xl text-ink">
+                    {s.icon === "scaffold" ? (
+                      <svg className="h-6 w-6 text-primary flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                        <path d="M3 3h18v2H3V3zm2 4h14v2H5V7zm-2 4h18v2H3v-2zm2 4h14v2H5v-2z" />
+                      </svg>
+                    ) : s.icon === "gear" ? (
+                      <svg className="h-6 w-6 text-primary flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                        <path d="M19.14 12.94c.04-.3.06-.6.06-.94s-.02-.64-.06-.94l2.03-1.58a.5.5 0 00.12-.63l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.02 7.02 0 00-1.62-.94L14.5 2h-5l-.56 2.33c-.57.22-1.11.5-1.62.84l-2.39-.96a.5.5 0 00-.6.22L1.9 9.48a.5.5 0 00.12.63L4.05 11.7c-.04.31-.06.63-.06.95s.02.64.06.95L1.9 15.8a.5.5 0 00-.12.63l1.92 3.32c.14.24.43.34.67.24l2.39-.96c.51.34 1.05.62 1.62.84L9.5 22h5l.56-2.33c.57-.22 1.11-.5 1.62-.84l2.39.96c.24.1.53 0 .67-.24l1.92-3.32a.5.5 0 00-.12-.63l-2.03-1.58zM12 15.5A3.5 3.5 0 1112 8.5a3.5 3.5 0 010 7z" />
+                      </svg>
+                    ) : (
+                      <svg className="h-6 w-6 text-primary flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                        <path d="M22 12c0-5.52-4.48-10-10-10-1.66 0-3.22.38-4.62 1.06L3 6v6l6.06 4.62C9.78 18.62 10.87 18 12 18c5.52 0 10-4.48 10-10zM11 14H9v-2h2v2zm0-4H9V8h2v2zm4 4h-2v-2h2v2zm0-4h-2V8h2v2z" />
+                      </svg>
+                    )}
+                    {s.title}
+                  </h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
                 </article>
               </FadeIn>
@@ -211,10 +241,10 @@ function Index() {
 
           <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
-              { img: projStadium, name: "Bugesera International Stadium", tag: "Ongoing · Scaffolding" },
-              { img: projConvention, name: "Kigali Convention Centre", tag: "Renovation · Access scaffolding" },
-              { img: projPlant, name: "Milk Powder Plant", tag: "Industrial · Equipment" },
-              { img: projHydro, name: "Gaseke Hydropower Plant", tag: "Energy · Maintenance" },
+              { img: projStadium, name: "Bugesera International Airport", tag: "Ongoing · Scaffolding" },
+              { img: kccImg, name: "Kigali Convention Centre", tag: "Renovation · Access scaffolding" },
+              { img: milkPowderImg, name: "Milk Powder Plant", tag: "Industrial · Equipment" },
+              { img: gasekeImg, name: "Gaseke Hydropower Plant", tag: "Energy · Maintenance" },
             ].map((p, index) => (
               <FadeIn key={p.name} delay={index * 150} className="h-full">
                 <article className="h-full group relative overflow-hidden rounded-2xl">

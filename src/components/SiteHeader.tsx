@@ -24,23 +24,26 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isTransparent = transparent && !isScrolled;
+  const isOverlay = !isScrolled;
+  const isCentered = !isScrolled;
 
-  const wrap = isTransparent
+  const wrap = isOverlay
     ? "fixed inset-x-0 top-0 z-50 bg-gradient-to-b from-black/90 via-black/50 to-transparent transition-all duration-300"
-    : "fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-lg transition-all duration-300 shadow-sm";
+    : isScrolled
+    ? "fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-lg transition-all duration-300 shadow-sm"
+    : "fixed inset-x-0 top-0 z-50 transition-all duration-300";
 
-  const navLink = isTransparent
+  const navLink = isOverlay
     ? "group relative text-base font-medium tracking-wide text-white transition-colors hover:text-white/80"
     : "group relative text-base font-medium tracking-wide text-foreground/80 transition-colors hover:text-primary";
 
-  const navActive = isTransparent ? "text-white drop-shadow-md" : "text-primary";
+  const navActive = isOverlay ? "text-white drop-shadow-md" : "text-primary";
 
-  const cta = isTransparent
+  const cta = isOverlay
     ? "hidden rounded-full border border-background/40 bg-background/10 px-6 py-2.5 text-sm font-medium text-white backdrop-blur-md transition-all hover:bg-background hover:text-ink md:inline-flex"
     : "hidden rounded-full bg-ink px-6 py-2.5 text-sm font-medium text-background transition-all hover:bg-primary md:inline-flex";
 
-  const currentLogo = isTransparent ? logoWhite : logoDark;
+  const currentLogo = isOverlay ? logoWhite : logoDark;
 
   const leftLinks = links.slice(0, 3);
   const rightLinks = links.slice(3);
@@ -48,8 +51,8 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
   return (
     <>
       <header className={wrap}>
-        <div className={`mx-auto flex max-w-7xl px-6 lg:px-10 transition-all duration-300 ${isTransparent ? 'h-auto py-6' : 'h-24 items-center justify-between'}`}>
-          {isTransparent ? (
+        <div className={`mx-auto flex max-w-7xl px-6 lg:px-10 transition-all duration-300 ${isCentered ? 'h-auto py-6' : 'h-24 items-center justify-between'}`}>
+          {isCentered ? (
             <div className="flex w-full items-center justify-between relative">
               {/* Left Contact Info */}
             <div className="hidden md:flex flex-1 flex-col items-start justify-center gap-1 text-sm font-medium text-white/90">
@@ -104,7 +107,7 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
               </button>
             </div>
           </div>
-        ) : (
+          ) : (
           <div className="flex h-full w-full items-center justify-between relative">
             {/* Mobile Logo (Absolute Center) */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:hidden flex items-center justify-center">
@@ -114,14 +117,14 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
             </div>
 
             {/* Left: Logo (Desktop) */}
-            <div className="hidden md:flex flex-1 items-center justify-start">
+            <div className={`hidden md:flex flex-1 items-center ${isCentered ? 'justify-center' : 'justify-start'}`}>
               <Link to="/" className="flex flex-shrink-0 items-center transition-transform hover:scale-105">
-                <img src={currentLogo} alt="TTS" className="h-12 w-auto object-contain transition-all duration-300" />
+                <img src={currentLogo} alt="TTS" className={`h-12 w-auto object-contain transition-all duration-300 ${isCentered ? '' : ''}`} />
               </Link>
             </div>
 
             {/* Middle: Nav */}
-            <nav className="hidden flex-[2] items-center justify-center gap-10 md:flex">
+            <nav className={`hidden flex-[2] items-center justify-center gap-10 md:flex ${isCentered ? '' : ''}`}>
               {links.map((l) => (
                 <Link
                   key={l.to}

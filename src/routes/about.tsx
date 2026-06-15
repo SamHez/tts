@@ -17,13 +17,15 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   return (
     <SiteLayout>
-      <section className="border-b border-border bg-secondary/50">
-        <FadeIn className="mx-auto max-w-7xl px-6 py-28 lg:px-10">
-          <div className="text-xs uppercase tracking-[0.22em] text-primary">About</div>
-          <h1 className="mt-6 max-w-4xl font-serif text-5xl leading-[1.05] text-ink md:text-7xl text-balance">
-            Trustable since <em className="text-primary">1988.</em>
+      <section className="border-b border-border bg-secondary/50 bg-page-header">
+        <FadeIn className="mx-auto max-w-7xl px-6 py-28 lg:px-10 text-center">
+          <div className="mt-20">
+            <span className="inline-block bg-primary rounded-full px-3 py-1 text-xs uppercase tracking-[0.22em] text-white">About</span>
+          </div>
+          <h1 className="mt-6 mx-auto max-w-4xl font-serif text-5xl leading-[1.05] text-white md:text-5xl text-balance font-extrabold">
+            Trustable since <em className="text-white">1988.</em>
           </h1>
-          <p className="mt-8 max-w-2xl text-lg text-foreground/75">
+          <p className="mt-8 mx-auto max-w-2xl text-lg text-white">
             TTS Ltd is a diversified investment company that applies decades of
             experience to scaffolding, construction equipment and maintenance
             services across Rwanda.
@@ -44,7 +46,7 @@ function AboutPage() {
         ))}
       </section>
 
-      <section className="border-t border-border bg-ink py-28 text-background">
+      <section className="border-t border-border bg-ink py-28 text-background bg-green">
         <FadeIn className="mx-auto max-w-7xl px-6 lg:px-10">
           <h2 className="max-w-3xl font-serif text-4xl text-background md:text-5xl">
             A company built on relationships, not transactions.

@@ -1,10 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { FadeIn } from "@/components/FadeIn";
 import projStadium from "@/assets/project-stadium.jpg";
 import projPlant from "@/assets/project-plant.jpg";
+import projRica from "@/assets/projects/rica.jpeg";
 import projHydro from "@/assets/project-hydro.jpg";
 import projConvention from "@/assets/project-convention.jpg";
+
+import bugeseraAirport from "@/assets/projects/Bugesera airport.jpg";
+import kccImg from "@/assets/projects/Kigali Convention Centre.jpg";
+import amahoroImg from "@/assets/projects/Amahoro national stadium.jpg";
+import bioNTechImg from "@/assets/projects/BioNTech Kigali.jpeg";
+import milkPowderImg from "@/assets/projects/inyange Milk powder.jpeg";
+import gasekeImg from "@/assets/projects/Gaseke Hydropower Plant.jpeg";
+import cimerwaImg from "@/assets/projects/Cimerwa factory.jpeg";
+import golfImg from "@/assets/projects/kigali Golf course.jpeg";
+import safariImg from "@/assets/projects/Safari Centre warehouse.jpeg";
 
 export const Route = createFileRoute("/projects")({
   head: () => ({
@@ -19,31 +31,37 @@ export const Route = createFileRoute("/projects")({
 });
 
 const ongoing = [
-  { name: "Bugesera International Stadium", tag: "Scaffolding · Equipment", img: projStadium },
-  { name: "RICA (Phase I & II)", tag: "Scaffolding · Maintenance", img: projPlant },
+  { name: "Bugesera International Airport", tag: "Scaffolding · Equipment", img: bugeseraAirport },
+  { name: "RICA (Phase I & II)", tag: "Scaffolding · Maintenance", img: projRica },
 ];
 
 const portfolio = [
-  { name: "Kigali Convention Centre", tag: "Access scaffolding · Renovation", img: projConvention },
-  { name: "Amahoro National Stadium", tag: "Scaffolding", img: projStadium },
-  { name: "BioNTech Kigali", tag: "Industrial · Equipment", img: projPlant },
-  { name: "Milk Powder Plant", tag: "Industrial · Equipment", img: projPlant },
-  { name: "Gaseke Hydropower Plant", tag: "Energy · Maintenance", img: projHydro },
-  { name: "Cimerwa Factory", tag: "Industrial · Equipment", img: projPlant },
-  { name: "Golf Course", tag: "Hospitality", img: projConvention },
-  { name: "Safari Centre Warehouses", tag: "Commercial", img: projConvention },
+  { name: "Bugesera Airport", tag: "Infrastructure · Aviation", img: bugeseraAirport },
+  { name: "Kigali Convention Centre", tag: "Access scaffolding · Renovation", img: kccImg },
+  { name: "Amahoro National Stadium", tag: "Scaffolding", img: amahoroImg },
+  { name: "BioNTech Kigali", tag: "Industrial · Equipment", img: bioNTechImg },
+  { name: "Milk Powder Plant", tag: "Industrial · Equipment", img: milkPowderImg },
+  { name: "Gaseke Hydropower Plant", tag: "Energy · Maintenance", img: gasekeImg },
+  { name: "Cimerwa Factory", tag: "Industrial · Equipment", img: cimerwaImg },
+  { name: "Golf Course", tag: "Hospitality", img: golfImg },
+  { name: "Safari Centre Warehouses", tag: "Commercial", img: safariImg },
+  { name: "RICA (Phase I & II)", tag: "Scaffolding · Maintenance", img: projRica },
 ];
 
 function ProjectsPage() {
+  const [lightbox, setLightbox] = useState<string | null>(null);
+
   return (
     <SiteLayout>
-      <section className="border-b border-border bg-secondary/50">
-        <FadeIn className="mx-auto max-w-7xl px-6 py-28 lg:px-10">
-          <div className="text-xs uppercase tracking-[0.22em] text-primary">Projects</div>
-          <h1 className="mt-6 max-w-4xl font-serif text-5xl leading-[1.05] text-ink md:text-7xl text-balance">
-            Trusted on Rwanda's <em className="text-primary">landmarks.</em>
+      <section className="border-b border-border bg-secondary/50 bg-page-header">
+        <FadeIn className="mx-auto max-w-7xl px-6 py-28 lg:px-10 text-center">
+          <div className="mt-20">
+            <span className="inline-block bg-primary rounded-full px-3 py-1 text-xs uppercase tracking-[0.22em] text-white">Projects</span>
+          </div>
+          <h1 className="mt-6 mx-auto max-w-4xl font-serif text-5xl leading-[1.05] text-white md:text-5xl text-balance font-extrabold">
+            Trusted on Rwanda's <em className="text-white ">landmarks.</em>
           </h1>
-          <p className="mt-8 max-w-2xl text-lg text-foreground/75">
+          <p className="mt-8 mx-auto max-w-2xl text-lg text-white">
             A selection of the projects we've supplied, supported and maintained — spanning sport, science, hospitality, industry and energy.
           </p>
         </FadeIn>
@@ -76,7 +94,10 @@ function ProjectsPage() {
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {portfolio.map((p, index) => (
               <FadeIn key={p.name} delay={index * 100}>
-                <article className="group">
+                <article
+                  className="group cursor-pointer"
+                  onClick={() => setLightbox(p.img)}
+                >
                   <div className="overflow-hidden rounded-2xl">
                     <img src={p.img} alt={p.name} loading="lazy" width={1200} height={900} className="aspect-[4/5] w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   </div>
@@ -95,6 +116,23 @@ function ProjectsPage() {
           </div>
         </div>
       </section>
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6"
+          onClick={() => setLightbox(null)}
+        >
+          <div className="relative max-h-[90vh] max-w-[90vw]">
+            <button
+              className="absolute -top-6 -right-6 rounded-full bg-black/60 p-2 text-white"
+              onClick={() => setLightbox(null)}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+            <img src={lightbox} alt="selected project" className="max-h-[90vh] w-auto rounded-2xl object-contain shadow-xl" />
+          </div>
+        </div>
+      )}
     </SiteLayout>
   );
 }
