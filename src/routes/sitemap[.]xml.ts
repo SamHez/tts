@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
+import { SITE_URL } from "@/lib/seo";
 
-const BASE_URL = "";
+const LAST_MODIFIED = "2026-06-19";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
           ...entries.map(
             (e) =>
-              `  <url><loc>${BASE_URL}${e.path}</loc><changefreq>${e.changefreq}</changefreq><priority>${e.priority}</priority></url>`,
+              `  <url><loc>${SITE_URL}${e.path === "/" ? "" : e.path}</loc><lastmod>${LAST_MODIFIED}</lastmod><changefreq>${e.changefreq}</changefreq><priority>${e.priority}</priority></url>`,
           ),
           `</urlset>`,
         ].join("\n");
